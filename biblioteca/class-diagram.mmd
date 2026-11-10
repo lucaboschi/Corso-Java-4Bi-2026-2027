@@ -1,0 +1,108 @@
+classDiagram
+    class Cliente {
+        +int MAXPRESTITI$
+        -int id
+        -String nome
+        -String cognome
+        -Prestito[] prestiti
+        -int numeroPrestiti
+        +Cliente(int id, String nome, String cognome)
+        +setId(int id) void
+        +setNome(String nome) void
+        +setCognome(String cognome) void
+        +getId() int
+        +getNome() String
+        +getCognome() String
+        +getNumeroPrestiti() int
+        +getListaPrestiti() Prestito[]
+        ~aggiungiPrestito(Prestito prestito) void
+        +toString() String
+    }
+
+    class Libro {
+        +int MAXCOPIE$
+        -String isbn
+        -String titolo
+        -String autore
+        -int annoPubblicazione
+        -CopiaLibro[] copie
+        -int numeroCopie
+        +Libro(String isbn, String titolo, String autore, int annoPubblicazione)
+        +setIsbn(String isbn) void
+        +setTitolo(String titolo) void
+        +setAutore(String autore) void
+        +setAnnoPubblicazione(int annoPubblicazione) void
+        +getIsbn() String
+        +getTitolo() String
+        +getAutore() String
+        +getAnnoPubblicazione() int
+        +getNumeroCopie() int
+        +getListaCopie() CopiaLibro[]
+        ~aggiungiCopia(CopiaLibro copia) void
+        +toString() String
+    }
+
+    class CopiaLibro {
+        +int MAXPRESTITI$
+        -String barcode
+        -StatoCopia stato
+        -Libro libro
+        -Prestito[] prestiti
+        -int numeroPrestiti
+        +CopiaLibro(String barcode, Libro libro, StatoCopia stato)
+        +CopiaLibro(String barcode, Libro libro)
+        +getBarcode() String
+        +getStato() StatoCopia
+        +getLibro() Libro
+        +getCopiaLibro() CopiaLibro
+        +getListaPrestiti() Prestito[]
+        +prestable() boolean
+        ~aggiungiPrestito(Prestito prestito) void
+        ~terminaPrestito(Prestito prestito) void
+        +impostaNonPrestabile() void
+        +impostaSmarrita() void
+        +impostaDisponibile() void
+        -controllaPrestitoNonAttivo() void
+        +toString() String
+    }
+
+    class Prestito {
+        -String id
+        -LocalDate dataInizio
+        -LocalDate dataScadenza
+        -LocalDate dataRestituzione
+        -Cliente cliente
+        -CopiaLibro copiaLibro
+        +Prestito(String id, LocalDate dataInizio, LocalDate dataScadenza, Cliente cliente, CopiaLibro copiaLibro)
+        +getId() String
+        +getDataInizio() LocalDate
+        +getDataScadenza() LocalDate
+        +getDataRestituzione() LocalDate
+        +getCliente() Cliente
+        +getCopiaLibro() CopiaLibro
+        +attivo() boolean
+        +registraRestituzione(LocalDate data) void
+        +toString() String
+    }
+
+    class StatoCopia {
+        <<enumeration>>
+        DISPONIBILE
+        IN_PRESTITO
+        NON_PRESTABILE
+        SMARRITA
+    }
+
+    class Main {
+        +main(String[] args) void$
+    }
+
+    Libro "1" -- "0..*" CopiaLibro : copie
+    Cliente "1" -- "0..*" Prestito : prestiti
+    CopiaLibro "1" -- "0..*" Prestito : storico
+    CopiaLibro --> StatoCopia : stato
+
+    Main ..> Libro : crea
+    Main ..> CopiaLibro : crea
+    Main ..> Cliente : crea
+    Main ..> Prestito : crea e restituisce
