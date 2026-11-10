@@ -1,21 +1,41 @@
-/**
- * Rappresenta un libro nel catalogo della biblioteca.
- * Aggiunta seconda riga di commento per testare il commit.
- */
+/** Descrizione bibliografica; un libro puo' avere piu' copie fisiche. */
 public class Libro {
+    private String isbn;
+    private String titolo;
+    private String autore;
+    private int annoPubblicazione;
 
-    private final String titolo;
-    private final String autore;
-    private final int anno;
-    private final String isbn;
-    private boolean disponibile;
+    // Associazione Libro (1) -- (0..N) CopiaLibro.
+    private CopiaLibro[] copie;
+    private int numeroCopie;
 
-    public Libro(String titolo, String autore, int anno, String isbn) {
+    public Libro(String isbn, String titolo, String autore, int annoPubblicazione) {
+        this.isbn = isbn;
         this.titolo = titolo;
         this.autore = autore;
-        this.anno = anno;
+        this.annoPubblicazione = annoPubblicazione;
+        copie = new CopiaLibro[2];
+        numeroCopie = 0;
+    }
+
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
-        this.disponibile = true;
+    }
+
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
+    public void setAutore(String autore) {
+        this.autore = autore;
+    }
+
+    public void setAnnoPubblicazione(int annoPubblicazione) {
+        this.annoPubblicazione = annoPubblicazione;
+    }
+
+    public String getIsbn() {
+        return isbn;
     }
 
     public String getTitolo() {
@@ -26,26 +46,48 @@ public class Libro {
         return autore;
     }
 
-    public int getAnno() {
-        return anno;
+    public int getAnnoPubblicazione() {
+        return annoPubblicazione;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public int getNumeroCopie() {
+        return numeroCopie;
     }
 
-    public boolean isDisponibile() {
-        return disponibile;
+    /** Nuovo array che contiene le sole copie esistenti. */
+    public CopiaLibro[] getListaCopie() {
+        CopiaLibro[] risultato = new CopiaLibro[numeroCopie];
+        for (int i = 0; i < numeroCopie; i++) {
+            risultato[i] = copie[i];
+        }
+        return risultato;
     }
 
-    public void setDisponibile(boolean disponibile) {
-        this.disponibile = disponibile;
+    /** Metodo di supporto dell'associazione: chiamato da CopiaLibro. */
+    void aggiungiCopia(CopiaLibro copia) {
+        if (copia == null || copia.getLibro() != this) {
+            throw new IllegalArgumentException("La copia non appartiene al libro");
+        }
+        for (int i = 0; i < numeroCopie; i++) {
+            if (copie[i] == copia) {
+                return;
+            }
+        }
+        if (numeroCopie == copie.length) {
+            CopiaLibro[] piuGrande = new CopiaLibro[copie.length * 2];
+            for (int i = 0; i < numeroCopie; i++) {
+                piuGrande[i] = copie[i];
+            }
+            copie = piuGrande;
+        }
+        copie[numeroCopie] = copia;
+        numeroCopie++;
     }
 
     @Override
     public String toString() {
-        return String.format("%-30s | %-20s | %4d | %-15s | %s",
-                titolo, autore, anno, isbn,
-                disponibile ? "disponibile" : "preso in prestito");
+        return titolo + " - " + autore + " (ISBN: " + isbn
+                + ", anno: " + annoPubblicazione
+                + ", copie: " + numeroCopie + ")";
     }
 }
