@@ -1,5 +1,6 @@
 /**
  * Rappresenta un libro nel catalogo della biblioteca.
+ * Aggiunta seconda riga di commento per testare il commit.
  */
 public class Libro {
 
