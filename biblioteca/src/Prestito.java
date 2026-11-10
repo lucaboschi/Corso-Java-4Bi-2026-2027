@@ -28,6 +28,14 @@ public class Prestito {
         if (!copiaLibro.prestabile()) {
             throw new IllegalStateException("La copia non e' disponibile");
         }
+
+        // Controllo aggiuntivo: una copia non puo' avere gia' un prestito attivo.
+        for (Prestito prestito : copiaLibro.getListaPrestiti()) {
+            if (prestito != null && prestito.attivo()) {
+                throw new IllegalStateException("La copia ha gia' un prestito attivo");
+            }
+        }
+
         this.id = id;
         this.dataInizio = dataInizio;
         this.dataScadenza = dataScadenza;
@@ -75,8 +83,11 @@ public class Prestito {
         if (!attivo()) {
             throw new IllegalStateException("Il prestito e' gia' stato restituito");
         }
-        dataRestituzione = data;
+        if (data.isBefore(dataInizio)) {
+            throw new IllegalArgumentException("La data di restituzione non puo' precedere la data di inizio");
+        }
         copiaLibro.terminaPrestito(this);
+        dataRestituzione = data;
     }
 
     @Override

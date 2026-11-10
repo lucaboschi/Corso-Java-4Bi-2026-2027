@@ -1,5 +1,7 @@
 /** Descrizione bibliografica; un libro puo' avere piu' copie fisiche. */
 public class Libro {
+    public static final int MAXCOPIE = 100;
+
     private String isbn;
     private String titolo;
     private String autore;
@@ -14,7 +16,7 @@ public class Libro {
         this.titolo = titolo;
         this.autore = autore;
         this.annoPubblicazione = annoPubblicazione;
-        copie = new CopiaLibro[2];
+        copie = new CopiaLibro[MAXCOPIE];
         numeroCopie = 0;
     }
 

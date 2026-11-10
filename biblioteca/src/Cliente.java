@@ -1,5 +1,7 @@
 /** Un cliente della biblioteca: un cliente puo' avere piu' prestiti. */
 public class Cliente {
+    public static final int MAXPRESTITI = 100;
+
     private int id;
     private String nome;
     private String cognome;
@@ -13,7 +15,7 @@ public class Cliente {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
-        prestiti = new Prestito[2];
+        prestiti = new Prestito[MAXPRESTITI];
         numeroPrestiti = 0;
     }
 

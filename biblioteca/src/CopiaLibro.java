@@ -1,5 +1,7 @@
 /** Singolo esemplare fisico di un Libro, con storico dei prestiti. */
 public class CopiaLibro {
+    public static final int MAXPRESTITI = 100;
+
     private String barcode;
     private StatoCopia stato;
 
@@ -24,7 +26,7 @@ public class CopiaLibro {
         this.barcode = barcode;
         this.libro = libro;
         this.stato = stato;
-        prestiti = new Prestito[2];
+        prestiti = new Prestito[MAXPRESTITI];
         numeroPrestiti = 0;
 
         // Aggiorna anche il lato Libro -> copie.
@@ -87,8 +89,8 @@ public class CopiaLibro {
 
     /** Metodo di supporto: chiamato alla restituzione del Prestito. */
     void terminaPrestito(Prestito prestito) {
-        if (prestito == null || prestito.attivo()) {
-            throw new IllegalArgumentException("Il prestito deve essere restituito");
+        if (prestito == null || !prestito.attivo()) {
+            throw new IllegalArgumentException("Il prestito deve essere ancora attivo");
         }
         boolean trovato = false;
         for (int i = 0; i < numeroPrestiti; i++) {
